@@ -1,0 +1,14 @@
+[
+  {
+    "className": "A",
+    "parent": null
+  },
+  {
+    "className": "B",
+    "parent": "A"
+  },
+  {
+    "className": "C",
+    "parent": "A"
+  }
+]

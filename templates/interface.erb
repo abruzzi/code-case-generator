@@ -1,0 +1,9 @@
+package <%= package_name %>;
+
+<%= modifier %> interface <%= class_name %> {
+  <% for @method in @methods %>
+    <%= @method.modifier %> void <%= @method.name %> () {
+      <%= @method.statement %>;
+    }
+  <% end %>
+}
