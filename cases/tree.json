@@ -3,12 +3,29 @@
     "modifier": "public",
     "name": "A",
     "parent": null,
-    "package": "p1"
+    "package": "p1",
+    "type": "class"
   },
   {
     "modifier": "public",
     "name": "B",
     "parent": "A",
-    "package": "p1.p2.p3"
+    "package": "p1.p2.p3",
+    "type": "class"
+  },
+  {
+    "modifier": "public",
+    "name": "IC",
+    "parent": null,
+    "package": "p1.p2.p3",
+    "type": "interface"
+  },
+  {
+    "modifier": "public",
+    "name": "ICImpl",
+    "parent": null,
+    "package": "p1.p2.p3",
+    "type": "class",
+    "interfaces": "IC"
   }
 ]

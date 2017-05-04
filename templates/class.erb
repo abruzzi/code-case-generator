@@ -1,6 +1,6 @@
 package <%= package_name %>;
 
-<%= modifier %> class <%= class_name %> extends <%= parent_class_name.nil? ? Object : parent_class_name %> {
+<%= modifier %> class <%= class_name %> extends <%= parent_class_name.nil? ? Object : parent_class_name %> implements <%= @interfaces.join(', ') %> {
   <% for @method in @methods %>
     <%= @method.modifier %> void <%= @method.name %> () {
       <%= @method.statement %>;

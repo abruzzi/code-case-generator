@@ -34,6 +34,7 @@ require 'faker'
 require 'json'
 
 require 'enumerator'
+require 'erb'
 
 class JavaMethod
   attr_accessor :modifier, :name, :statement
@@ -45,20 +46,43 @@ class JavaMethod
   end
 end
 
-require 'erb'
+class JavaInterface
+  include ERB::Util
+  attr_accessor :package_name, :modifier, :name, :methods
+
+  def initialize(package_name, modifier, name, methods)
+    @package_name = package_name
+    @modifier = modifier
+    @name = name
+    @methods = methods
+  end
+
+  def render()
+    ERB.new(File.open('templates/interface.erb', 'r').read).result(binding)
+  end
+
+  def save
+    phy_path = "./#{@package_name.gsub(".", "/")}"
+    FileUtils.mkdir_p(phy_path)
+    File.open("#{phy_path}/#{name}.java", "w").write(self.render)
+  end
+
+end
 
 class JavaClass
   include ERB::Util
 
   attr_accessor :package_name, :modifier, :class_name, :parent_class_name
   attr_accessor :methods
+  attr_accessor :interfaces
 
-  def initialize(package_name="", modifier, class_name, parent_class_name, methods)
+  def initialize(package_name="", modifier, class_name, parent_class_name, methods, interfaces)
     @package_name = package_name
     @modifier = modifier
     @class_name = class_name
     @parent_class_name = parent_class_name || "Object"
     @methods= methods
+    @interfaces = interfaces
   end
 
   def render()
@@ -79,7 +103,12 @@ def case_generate()
   end
 
   tree.each do |clazz|
-    JavaClass.new("#{clazz['package']}", clazz['modifier'], clazz['name'], clazz['parent'], methods).save
+    if(clazz['type'] == 'interface')
+      JavaInterface.new("#{clazz['package']}", clazz['modifier'], clazz['name'], methods).save
+    else
+      interfaces = clazz['interfaces'].nil? ? [] : clazz['interfaces'].split('|')
+      JavaClass.new("#{clazz['package']}", clazz['modifier'], clazz['name'], clazz['parent'], methods, interfaces).save
+    end
   end
 end
 
