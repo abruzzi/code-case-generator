@@ -1,14 +1,14 @@
 [
   {
-    "className": "A",
-    "parent": null
+    "modifier": "public",
+    "name": "A",
+    "parent": null,
+    "package": "p1"
   },
   {
-    "className": "B",
-    "parent": "A"
-  },
-  {
-    "className": "C",
-    "parent": "A"
+    "modifier": "public",
+    "name": "B",
+    "parent": "A",
+    "package": "p1.p2.p3"
   }
 ]

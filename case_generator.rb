@@ -72,42 +72,15 @@ class JavaClass
   end
 end
 
-def generate_class(java_class)
-  template = Tilt::ERBTemplate.new('templates/class.erb')
-  output = template.render(java_class)
-  p output
-  File.open("#{name}.java", "w").write(output)
-end
-
-def hier_generate(depth)
-  names = (1..depth+1).map do ||
-    Faker::Team.state.gsub(/\s*/, '')
-  end
-
-  names.unshift(nil)
-
-  (0..depth).enum_for(:each_with_index).map do |current, index|
-    {
-      :class_name => names[index+1],
-      :parent_class_name => names[index]
-    }
-  end
-
-end
-
-def case_generate(depth, sub_classes, extend_rate)
-  puts hier_generate(depth).to_json
-
+def case_generate()
+  tree = JSON.parse(File.open('cases/tree.json').read)
   methods = (0..3).enum_for(:each_with_index).map do |current, index|
     JavaMethod.new("public", "method#{index}", "System.out.println(\"method #{index} is invoked\")")
   end
 
-  hier_generate(depth).each do |clazz|
-    JavaClass.new("p1", "public", clazz[:class_name], clazz[:parent_class_name], methods).save
+  tree.each do |clazz|
+    JavaClass.new("#{clazz['package']}", clazz['modifier'], clazz['name'], clazz['parent'], methods).save
   end
-  # 
-  # java_class = JavaClass.new("p1", "public", "c1", nil, methods)
-  # java_class.save
 end
 
-case_generate(4, 0, 0)
+case_generate()
